@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwapMart  Trade Without Money</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ──────────── NAVIGATION ──────────── -->
+  <nav id="main-nav" style="display:none">
+    <div class="nav-logo">
+      <div class="dot"></div>
+      Swap<span>Mart</span>
+    </div>
+    <div class="nav-links">
+      <button id="nav-home" onclick="showPage('home')">Browse</button>
+      <button id="nav-add" onclick="showPage('add')">+ List Item</button>
+      <button id="nav-dash" onclick="showPage('dashboard')">Dashboard</button>
+      <button class="logout" onclick="logout()">Sign Out</button>
+    </div>
+    <div class="nav-user" id="nav-user-info" style="display:none">
+      <div class="nav-avatar" id="nav-avatar"></div>
+      <span class="trust-badge" id="nav-trust">⭐ 0</span>
+    </div>
+  </nav>
+
+  <!-- ──────────── AUTH PAGE ──────────── -->
+  <div id="auth-page" class="page active" style="display:flex">
+    <div class="auth-card">
+      <div class="auth-logo">Swap<span>Mart</span></div>
+      <div class="auth-sub">Trade freely. No money. Just swaps.</div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-form">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="login-user" placeholder="your username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-pass" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" onclick="login()">Sign In →</button>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signup-form" style="display:none">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="signup-user" placeholder="choose a username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signup-pass" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" onclick="signup()">Create Account →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── HOME / BROWSE PAGE ──────────── -->
+  <div id="home-page" class="page">
+    <div class="container">
+      <div class="hero">
+        <div class="hero-eyebrow">✦ No money required ✦</div>
+        <h1>Trade what you have<br>for what you <em>want</em></h1>
+        <p>List your items, browse what others offer, and swap directly — zero cash involved.</p>
+      </div>
+
+      <div class="filters">
+        <div class="search-box">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" id="search-input" placeholder="Search items…" oninput="renderItems()">
+        </div>
+        <button class="filter-btn active" onclick="filterCat(this, '')">All</button>
+        <button class="filter-btn" onclick="filterCat(this, 'Electronics')">📱 Electronics</button>
+        <button class="filter-btn" onclick="filterCat(this, 'Clothes')">👕 Clothes</button>
+        <button class="filter-btn" onclick="filterCat(this, 'Books')">📚 Books</button>
+        <button class="filter-btn" onclick="filterCat(this, 'Other')">🎲 Other</button>
+      </div>
+
+      <div class="items-grid" id="items-grid"></div>
+    </div>
+  </div>
+
+  <!-- ──────────── ADD ITEM PAGE ──────────── -->
+  <div id="add-page" class="page">
+    <div class="container">
+      <div class="page-header">
+        <h2>List an Item</h2>
+        <p>Post something you own and tell the world what you want in return.</p>
+      </div>
+
+      <div class="add-item-form">
+        <div class="form-group">
+          <label>Item Name</label>
+          <input type="text" id="item-name" placeholder="e.g., iPhone 18 Pro Max">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Condition</label>
+            <select id="item-condition">
+              <option value="New">New</option>
+              <option value="Used">Used</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="item-category">
+              <option value="Electronics">Electronics</option>
+              <option value="Clothes">Clothes</option>
+              <option value="Books">Books</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="item-desc" rows="3" placeholder="Describe your item's condition, features, etc."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>What do you want in exchange?</label>
+          <input type="text" id="item-want" placeholder="e.g., Gaming laptop, headphones…">
+        </div>
+
+        <div class="form-group">
+          <label>Image URL (optional)</label>
+          <input type="text" id="item-img" placeholder="https://..." oninput="previewImg()">
+          <div class="img-preview" id="img-preview-box">🖼</div>
+        </div>
+
+        <button class="btn btn-primary" onclick="addItem()">Publish Item →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── DASHBOARD PAGE ──────────── -->
+  <div id="dashboard-page" class="page">
+    <div class="container">
+      <div class="page-header">
+        <h2 id="dash-greeting">My Dashboard</h2>
+        <p>Manage your listings and trade requests.</p>
+      </div>
+
+      <!-- Stats Strip -->
+      <div class="stats-strip">
+        <div class="stat-card">
+          <div class="stat-label">My Listings</div>
+          <div class="stat-value accent" id="stat-listings">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Trades</div>
+          <div class="stat-value" id="stat-pending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Trust Score ⭐</div>
+          <div class="stat-value accent" id="stat-trust">0</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+
+        <!-- My Items -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title">
+              📦 My Items
+              <span class="dash-badge" id="my-items-count">0</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="showPage('add')">+ Add</button>
+          </div>
+          <div class="dash-card-body" id="my-items-list"></div>
+        </div>
+
+        <!-- Received Requests -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title">
+              📬 Received Requests
+              <span class="dash-badge" id="received-count">0</span>
+            </div>
+          </div>
+          <div class="dash-card-body" id="received-list"></div>
+        </div>
+
+        <!-- Sent Requests -->
+        <div class="dash-card full-width">
+          <div class="dash-card-header">
+            <div class="dash-card-title">
+              📤 Sent Requests
+              <span class="dash-badge" id="sent-count">0</span>
+            </div>
+          </div>
+          <div class="dash-card-body" id="sent-list"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── TRADE MODAL ──────────── -->
+  <div class="modal-overlay" id="trade-modal">
+    <div class="modal">
+      <div class="modal-title">Propose a Trade</div>
+      <div class="modal-sub">You're offering one of your items in exchange.</div>
+      <div class="trade-item-preview" id="modal-target-item"></div>
+      <div class="form-group">
+        <label>Offer one of your items</label>
+        <select id="offer-select"></select>
+      </div>
+      <div class="form-group">
+        <label>Message (optional)</label>
+        <textarea id="trade-message" rows="2" placeholder="Add a note to your offer…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitTrade()">Send Proposal →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── TOAST NOTIFICATION ──────────── -->
+  <div id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
