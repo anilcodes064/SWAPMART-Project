@@ -28,7 +28,7 @@ window.onload = () => {
     if (e.target === this) closeModal();
   });
 };
-  
+
 // ──────────────── UTILS ────────────────
 function escHtml(s) {
   return String(s)
@@ -248,6 +248,16 @@ function previewImg() {
   box.classList.add('has-img');
 }
 
+function getCurrentUsername() {
+  return String(currentUser || '').trim();
+}
+
+function isOwnedByCurrentUser(item) {
+  const owner = String(item.owner || '').trim();
+  const user = getCurrentUsername();
+  return user && owner === user;
+}
+
 function filterCat(btn, cat) {
   document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
   btn.classList.add('active');
@@ -257,7 +267,7 @@ function filterCat(btn, cat) {
 
 function renderItems() {
   const q = (document.getElementById('search-input')?.value || '').toLowerCase();
-  let items = getItems().filter((i) => i.owner !== currentUser);
+  let items = getItems().filter((i) => !isOwnedByCurrentUser(i));
 
   if (activeCategory) items = items.filter((i) => i.category === activeCategory);
   if (q)
