@@ -98,7 +98,7 @@
   <div id="add-page" class="page">
     <div class="container">
       <div class="page-header">
-        <h2>List an Item</h2>
+        <h2 id="add-page-title">List an Item</h2>
         <p>Post something you own and tell the world what you want in return.</p>
       </div>
 
@@ -143,7 +143,10 @@
           <div class="img-preview" id="img-preview-box">🖼</div>
         </div>
 
-        <button class="btn btn-primary" onclick="addItem()">Publish Item →</button>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="publish-item-btn" onclick="addItem()">Publish Item →</button>
+          <button class="btn btn-secondary btn-sm" id="cancel-edit-btn" style="display:none" onclick="cancelEdit()">Cancel</button>
+        </div>
       </div>
     </div>
   </div>

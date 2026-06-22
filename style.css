@@ -281,6 +281,17 @@ nav {
   text-decoration: none;
 }
 
+.form-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-actions .btn {
+  width: auto;
+  flex: 1;
+}
+
 .btn-primary {
   background: var(--accent);
   color: #0e0f11;

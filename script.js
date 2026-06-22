@@ -12,6 +12,7 @@ const S = {
 let currentUser = null;
 let activeCategory = '';
 let tradeTargetItem = null;
+let editingItemId = null;
 let toastTimer = null;
 
 // ──────────────── INIT ────────────────
@@ -27,7 +28,7 @@ window.onload = () => {
     if (e.target === this) closeModal();
   });
 };
-
+  
 // ──────────────── UTILS ────────────────
 function escHtml(s) {
   return String(s)
@@ -118,7 +119,7 @@ function updateNavTrust() {
 }
 
 // ──────────────── PAGE NAVIGATION ────────────────
-function showPage(p) {
+function showPage(p, preserveForm = false) {
   document.querySelectorAll('.page').forEach((el) => el.classList.remove('active'));
   document.querySelectorAll('.nav-links button').forEach((b) => b.classList.remove('active'));
 
@@ -129,8 +130,59 @@ function showPage(p) {
   const navBtn = document.getElementById(navId);
   if (navBtn) navBtn.classList.add('active');
 
+  if (p === 'add' && !preserveForm) resetAddForm();
   if (p === 'home') renderItems();
   if (p === 'dashboard') renderDashboard();
+}
+
+function setAddMode(editing = false) {
+  const title = document.getElementById('add-page-title');
+  const publishButton = document.getElementById('publish-item-btn');
+  const cancelButton = document.getElementById('cancel-edit-btn');
+
+  if (editing) {
+    title.textContent = 'Edit Listing';
+    publishButton.textContent = 'Save Changes';
+    cancelButton.style.display = 'inline-flex';
+    return;
+  }
+
+  title.textContent = 'List an Item';
+  publishButton.textContent = 'Publish Item →';
+  cancelButton.style.display = 'none';
+}
+
+function resetAddForm() {
+  editingItemId = null;
+  document.getElementById('item-name').value = '';
+  document.getElementById('item-condition').value = 'New';
+  document.getElementById('item-category').value = 'Electronics';
+  document.getElementById('item-desc').value = '';
+  document.getElementById('item-want').value = '';
+  document.getElementById('item-img').value = '';
+  previewImg();
+  setAddMode(false);
+}
+
+function startEditItem(itemId) {
+  const items = getItems();
+  const item = items.find((i) => i.id === itemId && i.owner === currentUser);
+  if (!item) return toast('Listing not found', 'error');
+
+  editingItemId = itemId;
+  document.getElementById('item-name').value = item.name;
+  document.getElementById('item-condition').value = item.condition;
+  document.getElementById('item-category').value = item.category;
+  document.getElementById('item-desc').value = item.desc || '';
+  document.getElementById('item-want').value = item.want;
+  document.getElementById('item-img').value = item.img || '';
+  previewImg();
+  setAddMode(true);
+  showPage('add', true);
+}
+
+function cancelEdit() {
+  resetAddForm();
 }
 
 // ──────────────── ITEMS ────────────────
@@ -148,6 +200,24 @@ function addItem() {
   if (!name || !want) return toast('Item name and exchange request are required', 'error');
 
   const items = getItems();
+  if (editingItemId) {
+    const item = items.find((i) => i.id === editingItemId && i.owner === currentUser);
+    if (!item) return toast('Unable to update item', 'error');
+
+    item.name = name;
+    item.condition = cond;
+    item.category = cat;
+    item.desc = desc;
+    item.want = want;
+    item.img = img;
+    saveItems(items);
+
+    resetAddForm();
+    toast('Item updated successfully!', 'success');
+    showPage('dashboard');
+    return;
+  }
+
   items.unshift({
     id: Date.now(),
     owner: currentUser,
@@ -161,14 +231,7 @@ function addItem() {
   });
   saveItems(items);
 
-  // Reset form
-  ['item-name', 'item-desc', 'item-want', 'item-img'].forEach(
-    (id) => (document.getElementById(id).value = '')
-  );
-  const previewBox = document.getElementById('img-preview-box');
-  previewBox.innerHTML = '🖼';
-  previewBox.classList.remove('has-img');
-
+  resetAddForm();
   toast('Item listed successfully!', 'success');
   showPage('home');
 }
@@ -403,6 +466,7 @@ function renderDashboard() {
           <div class="dash-item-meta">${item.condition} · wants ${escHtml(item.want)}</div>
         </div>
         <div class="dash-item-actions">
+          <button class="btn btn-secondary btn-sm" onclick="startEditItem(${item.id})">Edit</button>
           <button class="btn btn-danger btn-sm" onclick="deleteItem(${item.id})">Remove</button>
         </div>
       </div>`
