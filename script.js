@@ -61,6 +61,10 @@ function switchTab(tab) {
   );
   document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
   document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+  const authCard = document.querySelector('.auth-card');
+  if (authCard) {
+    authCard.classList.toggle('login-mode', tab === 'login');
+  }
 }
 
 function signup() {
@@ -86,6 +90,15 @@ function login() {
   S.set('sm_session', u);
   enterApp();
   toast(`Welcome back, ${u}!`, 'success');
+}
+
+function togglePassword(fieldId, button) {
+  const input = document.getElementById(fieldId);
+  if (!input) return;
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  button.textContent = show ? 'Hide' : 'Show';
+  button.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
 }
 
 function logout() {

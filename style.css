@@ -177,6 +177,16 @@ nav {
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
 }
 
+.auth-card.login-mode {
+  background: linear-gradient(145deg, rgba(16, 179, 68, 0.12), rgba(22, 24, 28, 0.95));
+  border-color: rgba(16, 179, 68, 0.35);
+}
+
+.auth-card.login-mode .auth-logo span,
+.auth-card.login-mode .auth-sub {
+  color: #b7ffb5;
+}
+
 .auth-logo {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
@@ -247,6 +257,35 @@ nav {
   outline: none;
   transition: var(--transition);
   resize: vertical;
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 92px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.password-toggle:hover {
+  color: var(--text);
+  background: rgba(212, 247, 76, 0.08);
 }
 
 .form-group input:focus,

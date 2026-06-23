@@ -29,7 +29,7 @@
 
   <!-- ──────────── AUTH PAGE ──────────── -->
   <div id="auth-page" class="page active" style="display:flex">
-    <div class="auth-card">
+    <div class="auth-card login-mode">
       <div class="auth-logo">Swap<span>Mart</span></div>
       <div class="auth-sub">Trade freely. No money. Just swaps.</div>
 
@@ -41,12 +41,15 @@
       <!-- Login Form -->
       <div id="login-form">
         <div class="form-group">
-          <label>Username</label>
+          <label>👤Username</label>
           <input type="text" id="login-user" placeholder="your username">
         </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="login-pass" placeholder="••••••••">
+        <div class="form-group password-group">
+          <label>🔒Password</label>
+          <div class="password-field">
+            <input type="password" id="login-pass" placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePassword('login-pass', this)">Show</button>
+          </div>
         </div>
         <button class="btn btn-primary" onclick="login()">Sign In →</button>
       </div>
@@ -54,12 +57,15 @@
       <!-- Signup Form -->
       <div id="signup-form" style="display:none">
         <div class="form-group">
-          <label>Username</label>
+          <label>👤Username</label>
           <input type="text" id="signup-user" placeholder="choose a username">
         </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="signup-pass" placeholder="••••••••">
+        <div class="form-group password-group">
+          <label>🔒Password</label>
+          <div class="password-field">
+            <input type="password" id="signup-pass" placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePassword('signup-pass', this)">Show</button>
+          </div>
         </div>
         <button class="btn btn-primary" onclick="signup()">Create Account →</button>
       </div>
